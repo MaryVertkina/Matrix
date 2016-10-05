@@ -1,9 +1,12 @@
 package edu.spbu.cs;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -36,27 +39,49 @@ public class DenseMatrix implements IMatrix {
 
     @Override
     public IMatrix add(IMatrix o) {
+//        int size = matrix.length;
+//        DenseMatrix res = new DenseMatrix(size);
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                res.matrix[i][j] = this.matrix[i][j] + o.getMatrix()[i][j];
+//            }
+//        }
+//        return res;
         return null;
     }
 
     @Override
     public IMatrix multiply(IMatrix o) {
+        return (o instanceof DenseMatrix) ? multiplyDense((DenseMatrix) o) : multiplySparse((SparseMatrix) o);
+    }
+
+    private IMatrix multiplyDense(DenseMatrix o) {
         int size = matrix.length;
-        DenseMatrix res = new DenseMatrix(size);
-        transponation(o.getMatrix());
+        DenseMatrix resMatrix = new DenseMatrix(size);
+        o.transponation();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 for (int k = 0; k < size; k++) {
-                    res.matrix[i][j] = res.matrix[i][j] + this.matrix[i][k] * o.getMatrix()[j][k];
+                    resMatrix.getMatrix()[i][j] += this.matrix[i][k] * o.getMatrix()[j][k];
                 }
             }
         }
-        return res;
+        return resMatrix;
     }
 
-    @Override
-    public int[][] getMatrix() {
-        return matrix;
+    private IMatrix multiplySparse(SparseMatrix o) {
+        int size = matrix.length;
+        DenseMatrix resMatrix = new DenseMatrix(size);
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                for (int k = 0; k < size; k++) {
+                    Point coord2 = new Point(j, k);
+                    int v2 = o.getMap().get(coord2) != null ? o.getMap().get(coord2) : 0;
+                    resMatrix.getMatrix()[i][j] += this.matrix[i][k] * v2;
+                }
+            }
+        }
+        return resMatrix;
     }
 
     @Override
@@ -73,12 +98,16 @@ public class DenseMatrix implements IMatrix {
         return res.toString();
     }
 
-    private void transponation(int[][] m){
-        for (int i = 0; i < m.length - 1; i++) {
-            for (int j = i + 1; j < m.length; j++) {
-                int b = m[i][j];
-                m[i][j] = m[j][i];
-                m[j][i] = b;
+    public int[][] getMatrix() {
+        return matrix;
+    }
+
+    public void transponation(){
+        for (int i = 0; i < matrix.length - 1; i++) {
+            for (int j = i + 1; j < matrix.length; j++) {
+                int b = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = b;
             }
         }
     }

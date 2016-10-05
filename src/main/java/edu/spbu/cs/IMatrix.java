@@ -7,5 +7,4 @@ public interface IMatrix {
     IMatrix add(IMatrix o);
     IMatrix multiply(IMatrix o);
     String toString();
-    int[][] getMatrix();
 }
