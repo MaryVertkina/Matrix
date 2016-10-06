@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-/**
- * Created by Маша on 05.10.2016.
- */
 public class SparseMatrix implements IMatrix {
     private Map<Point, Integer> map;
     private int mapSize;
@@ -18,34 +15,29 @@ public class SparseMatrix implements IMatrix {
         Scanner in = null;
         try {
             in = new Scanner(new File(inFileName));
+            mapSize = in.nextInt();
+            map = new HashMap<>();
+            int v;
+            for (int i = 0; i < mapSize; i++) {
+                for (int j = 0; j < mapSize; j++) {
+                    v = in.nextInt();
+                    if (v != 0) {
+                        map.put(new Point(j, i), v);
+                    }
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        int number = in.nextInt();
-        map = new HashMap<>();
-
-        mapSize = 0;
-        for (int i = 0; i < number; i++) {
-            int x = in.nextInt();
-            int y = in.nextInt();
-            int v = in.nextInt();
-            Point coord = new Point(x, y);
-            if (coord.x > mapSize || coord.y > mapSize) {
-                mapSize = Math.max(coord.x, coord.y);
+        } finally {
+            if (in != null) {
+                in.close();
             }
-            map.put(coord, v);
-            mapSize++;
         }
     }
 
     private SparseMatrix(Map<Point, Integer> map, int size) {
         this.map = map;
         this.mapSize = size;
-    }
-
-    @Override
-    public IMatrix add(IMatrix o) {
-        return null;
     }
 
     @Override
@@ -101,11 +93,17 @@ public class SparseMatrix implements IMatrix {
     public String toString() {
         StringBuffer res = new StringBuffer();
 
-        for(Map.Entry<Point, Integer> entry : map.entrySet()) {
-            Point coord = entry.getKey();
-            int value = entry.getValue();
-            res.append((int) coord.getX()).append(" ").append((int) coord.getY()).append(" ").append("" + (int) value).append("\n");
+        for (int i = 0; i < mapSize; i++) {
+            for (int j = 0; j < mapSize; j++) {
+                Integer v = map.get(new Point(j, i));
+                if (v == null) {
+                    v = 0;
+                }
+                res.append(v + " ");
+            }
+            res.append("\n");
         }
+
         return res.toString();
     }
 

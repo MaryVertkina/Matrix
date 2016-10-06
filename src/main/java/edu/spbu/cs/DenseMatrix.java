@@ -2,16 +2,8 @@ package edu.spbu.cs;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
-
-/**
- * Created by Маша on 05.10.2016.
- */
 
 public class DenseMatrix implements IMatrix {
     private int matrix[][];
@@ -20,34 +12,24 @@ public class DenseMatrix implements IMatrix {
         Scanner in = null;
         try {
             in = new Scanner(new File(inFileName));
+            int size = in.nextInt();
+            matrix = new int[size][size];
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    matrix[i][j] = in.nextInt();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        int size = in.nextInt();
-        matrix = new int[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                matrix[i][j] = in.nextInt();
+        } finally {
+            if (in != null) {
+                in.close();
             }
         }
     }
 
     private DenseMatrix(int size) {
         matrix = new int[size][size];
-    }
-
-
-    @Override
-    public IMatrix add(IMatrix o) {
-//        int size = matrix.length;
-//        DenseMatrix res = new DenseMatrix(size);
-//        for (int i = 0; i < size; i++) {
-//            for (int j = 0; j < size; j++) {
-//                res.matrix[i][j] = this.matrix[i][j] + o.getMatrix()[i][j];
-//            }
-//        }
-//        return res;
-        return null;
     }
 
     @Override
@@ -90,7 +72,7 @@ public class DenseMatrix implements IMatrix {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-                res.append(matrix[i][j] + "  ");
+                res.append(matrix[i][j] + " ");
             }
             res.append("\n");
         }

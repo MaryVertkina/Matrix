@@ -1,74 +1,45 @@
 package edu.spbu.cs;
 
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 import static org.junit.Assert.*;
 
-/**
- * Created by artemaliev on 07/09/15.
- */
 public class MatrixTest
 {
-  public static final int SEED = 1;
-  public static final int ARRAY_SIZE = 10000000;
+    private final String matrixResStr = "-21 -12 1 \n"
+                                      + "20 19 16 \n"
+                                      + "31 37 42 \n";
 
-  /**
-   *
-   * @param size array size
-   * @param seed for the pseudo random generator
-   * @return random generated int array. It will be the same for the same seed and size.
-   */
-  int[] generateRandomIntArray(int size, long seed) {
-    int array[] = new int[size];
-    Random rnd = new Random(seed);
-    for (int i = 0 ; i < array.length; i++) {
-      array[i] = rnd.nextInt();
-    }
-    return array;
-  }
+    @Test
+    public void testMulDenseDense() throws Exception {
+        IMatrix m1 = new DenseMatrix("in1.txt");
+        IMatrix m2 = new DenseMatrix("in2.txt");
 
-  @Test
-  public void testSortArray() throws Exception {
-    int array[] = generateRandomIntArray(ARRAY_SIZE, SEED);
-
-    //сортируем массив и замеряем время работы
-    long startTime = System.nanoTime();
-    IntSort.sort(array);
-    long estimatedTime = System.nanoTime() - startTime;
-    System.out.println("Execution time(ms) " + (estimatedTime/ 1000000));
-
-    // проверяем правильность сортировки
-    int previousValue = Integer.MIN_VALUE;
-    for (int i = 0; i < array.length ; i++) {
-      assertTrue("Element " + array[i] + " at " + i + " position is not in the order", array[i] >= previousValue );
-      previousValue = array[i];
-    }
-  }
-
-  @Test
-  public void testSortList() throws Exception {
-    int array[] = generateRandomIntArray(ARRAY_SIZE, SEED);
-    List<Integer> list = new ArrayList<Integer>(ARRAY_SIZE);
-    for (int i: array) {
-      list.add(Integer.valueOf(i));
+        IMatrix res = m1.multiply(m2);
+        assertEquals(matrixResStr, res.toString());
     }
 
-    //сортируем массив и замеряем время работы
-    long startTime = System.nanoTime();
-    IntSort.sort(list);
-    long estimatedTime = System.nanoTime() - startTime;
-    System.out.println("Execution time(ms) " + (estimatedTime/ 1000000));
+    @Test
+    public void testMulSparseSparse() throws Exception {
+        IMatrix m1 = new SparseMatrix("in1.txt");
+        IMatrix m2 = new SparseMatrix("in2.txt");
 
-    // проверяем правильность сортировки
-    int previousValue = Integer.MIN_VALUE;
-    for (int i = 0; i < list.size() ; i++) {
-      assertTrue("Element " + list.get(i) + " at " + i + " position is not in the order", list.get(i) >= previousValue);
-      previousValue = list.get(i);
+        IMatrix res = m1.multiply(m2);
+        assertEquals(matrixResStr, res.toString());
     }
-  }
+    @Test
+    public void testMulDenseSparce() throws Exception {
+        IMatrix m1 = new DenseMatrix("in1.txt");
+        IMatrix m2 = new SparseMatrix("in2.txt");
+
+        IMatrix res = m1.multiply(m2);
+        assertEquals(matrixResStr, res.toString());
+    }
+    @Test
+    public void testMulSparceDense() throws Exception {
+        IMatrix m1 = new SparseMatrix("in1.txt");
+        IMatrix m2 = new DenseMatrix("in2.txt");
+
+        IMatrix res = m1.multiply(m2);
+        assertEquals(matrixResStr, res.toString());
+    }
 }
