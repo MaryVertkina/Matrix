@@ -47,23 +47,27 @@ public class SparseMatrix implements IMatrix {
 
     private IMatrix multiplySparse(SparseMatrix o) {
         Map<Point, Integer> resMatrix = new HashMap<>();
-        int size = Math.max(mapSize, o.getSize());
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                Point coordRes = new Point(j, i);
-                int res = 0;
-                for (int k = 0; k < size; k++) {
-                    Point coord1 = new Point(k, i);
-                    Point coord2 = new Point(j, k);
-                    int v1 = map.get(coord1) != null ? map.get(coord1) : 0;
-                    int v2 = o.getMap().get(coord2) != null ? o.getMap().get(coord2) : 0;
-                    res +=  v1 * v2;
-                }
-                if (res != 0) {
-                    resMatrix.put(coordRes, res);
-                }
-            }
+        for (Map.Entry<Point,Integer> e : map.entrySet()){
+            Point k = e.getKey();
+            int v = e.getValue();
         }
+//        int size = Math.max(mapSize, o.getSize());
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                Point coordRes = new Point(j, i);
+//                int res = 0;
+//                for (int k = 0; k < size; k++) {
+//                    Point coord1 = new Point(k, i);
+//                    Point coord2 = new Point(j, k);
+//                    int v1 = map.get(coord1) != null ? map.get(coord1) : 0;
+//                    int v2 = o.getMap().get(coord2) != null ? o.getMap().get(coord2) : 0;
+//                    res +=  v1 * v2;
+//                }
+//                if (res != 0) {
+//                    resMatrix.put(coordRes, res);
+//                }
+//            }
+//        }
         return new SparseMatrix(resMatrix, size);
     }
 
