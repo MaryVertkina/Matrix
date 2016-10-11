@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 
 public class MatrixTest
 {
-    private final String matrixResStr = "-21 -12 1 \n"
-                                      + "20 19 16 \n"
-                                      + "31 37 42 \n";
+    private final String matrixResStr = "-21.0 -12.0 1.0 \n"
+                                      + "20.0 19.0 16.0 \n"
+                                      + "31.0 37.0 42.0 \n";
 
     @Test
     public void testMulDenseDense() throws Exception {

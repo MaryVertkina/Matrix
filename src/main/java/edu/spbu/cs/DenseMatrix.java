@@ -6,17 +6,17 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class DenseMatrix implements IMatrix {
-    private int matrix[][];
+    private double matrix[][];
 
     public DenseMatrix(String inFileName) {
         Scanner in = null;
         try {
             in = new Scanner(new File(inFileName));
             int size = in.nextInt();
-            matrix = new int[size][size];
+            matrix = new double[size][size];
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    matrix[i][j] = in.nextInt();
+                    matrix[i][j] = in.nextDouble();
                 }
             }
         } catch (IOException e) {
@@ -29,7 +29,7 @@ public class DenseMatrix implements IMatrix {
     }
 
     private DenseMatrix(int size) {
-        matrix = new int[size][size];
+        matrix = new double[size][size];
     }
 
     @Override
@@ -58,7 +58,7 @@ public class DenseMatrix implements IMatrix {
             for (int j = 0; j < size; j++) {
                 for (int k = 0; k < size; k++) {
                     Point coord2 = new Point(j, k);
-                    int v2 = o.getMap().get(coord2) != null ? o.getMap().get(coord2) : 0;
+                    double v2 = o.getMap().get(coord2) != null ? o.getMap().get(coord2) : 0;
                     resMatrix.getMatrix()[i][j] += this.matrix[i][k] * v2;
                 }
             }
@@ -80,14 +80,14 @@ public class DenseMatrix implements IMatrix {
         return res.toString();
     }
 
-    public int[][] getMatrix() {
+    public double[][] getMatrix() {
         return matrix;
     }
 
     public void transponation(){
         for (int i = 0; i < matrix.length - 1; i++) {
             for (int j = i + 1; j < matrix.length; j++) {
-                int b = matrix[i][j];
+                double b = matrix[i][j];
                 matrix[i][j] = matrix[j][i];
                 matrix[j][i] = b;
             }
